@@ -27,7 +27,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-        <title>CVSS v4.0 calculator</title>
+        <title>Common Vulnerability Scoring System Version 4.0 Calculator</title>
         <script src="https://unpkg.com/vue@3.2.45/dist/vue.global.prod.js"></script>
         <script src="cvss_config.js?v=2"></script>
         <script src="cvss_details.js?v=1"></script>
@@ -44,7 +44,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     <body>
         <div id="app" class="container">
             <div id="header">
-                <h4 class="page-title">CVSS v4.0 calculator</h4>
+            <img alt="CVSS logo" src="https://first.org/cvss/identity/cvssv4_web.png" width="125">
+                <h3 class="page-title">Common Vulnerability Scoring System Version 4.0 Calculator</h3>
                 <mark class="tooltip c-hand" data-tooltip="Click vector to copy to clipboard" @click="copyVector">
                     {{ vector }}
                 </mark>
@@ -68,6 +69,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             </div>
 
             <div class="columns" :style="{'margin-top': header_height + 10 + 'px'}">
+				<h6 id="cvssReference" style="width: 100%; max-width: 1065px; margin: 10px;"> Hover over metric names and metric values for a summary of the information in the official CVSS v4.0 Specification Document. The Specification is available in the list of links on the left, along with a User Guide providing additional scoring guidance, an Examples document of scored vulnerabilities, a set of Frequently Asked Questions (FAQ), and both JSON and XML Data Representations for all versions of CVSS.</h6>
                 <div class="column col-10 col-xl-12">
                     <div class="metric-type" v-for="(metricTypeData, metricType) in cvssConfigData">
                         <h4 class="text-center">
@@ -76,6 +78,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                                 <sup>?</sup>
                             </span>
                         </h4>
+
                         <div class="metric-group" v-for="(metricGroupData, metricGroup) in metricTypeData.metric_groups">
                             <h5 class="text-center">{{ metricGroup }}</h5>
                             <div>
