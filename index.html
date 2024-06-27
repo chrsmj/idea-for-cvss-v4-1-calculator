@@ -74,7 +74,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                     <div class="metric-type" v-for="(metricTypeData, metricType) in cvssConfigData">
                         <h4 class="text-center">
                             {{ metricType }}
-                            <span class="tooltip tooltip-left c-hand text-small" :data-tooltip="'This category is usually filled \n by the ' + metricTypeData.fill">
+                            <span class="tooltip tooltip-left c-hand text-small" :data-tooltip="'This category should be filled \n by the ' + metricTypeData.fill">
                                 <sup>?</sup>
                             </span>
                         </h4>
