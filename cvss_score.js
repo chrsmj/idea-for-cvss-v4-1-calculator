@@ -291,19 +291,21 @@ function m(cvssSelected, metric) {
 
 function macroVector(cvssSelected) {
     // EQ1: 0-AV:N and PR:N and UI:N
-    //      1-(AV:N or PR:N or UI:N) and not (AV:N and PR:N and UI:N) and not AV:P
-    //      2-AV:P or not(AV:N or PR:N or UI:N)
+    //      1-PR:N and (AV:N or UI:N) and not (AV:N and UI:N) and not AV:P
+    //      2-AV:P or not PR:N or not(AV:N or UI:N)
 
     if (m(cvssSelected, "AV") == "N" && m(cvssSelected, "PR") == "N" && m(cvssSelected, "UI") == "N") {
         eq1 = "0"
     }
-    else if ((m(cvssSelected, "AV") == "N" || m(cvssSelected, "PR") == "N" || m(cvssSelected, "UI") == "N")
-        && !(m(cvssSelected, "AV") == "N" && m(cvssSelected, "PR") == "N" && m(cvssSelected, "UI") == "N")
+    else if ((m(cvssSelected, "PR") == "N")
+	&& (m(cvssSelected, "AV") == "N" || m(cvssSelected, "UI") == "N")
+        && !(m(cvssSelected, "AV") == "N" && m(cvssSelected, "UI") == "N")
         && !(m(cvssSelected, "AV") == "P")) {
         eq1 = "1"
     }
     else if (m(cvssSelected, "AV") == "P"
-        || !(m(cvssSelected, "AV") == "N" || m(cvssSelected, "PR") == "N" || m(cvssSelected, "UI") == "N")) {
+        || !(m(cvssSelected, "PR") == "N")
+        || !(m(cvssSelected, "AV") == "N" || m(cvssSelected, "UI") == "N")) {
         eq1 = "2"
     }
 
@@ -317,13 +319,13 @@ function macroVector(cvssSelected) {
         eq2 = "1"
     }
 
-    // EQ3: 0-(VC:H and VI:H)
-    //      1-(not(VC:H and VI:H) and (VC:H or VI:H or VA:H))
+    // EQ3: 0-(VC:H and VI:H and PR:N)
+    //      1-not PR:N or (not(VC:H and VI:H) and (VC:H or VI:H or VA:H))
     //      2-not (VC:H or VI:H or VA:H)
-    if (m(cvssSelected, "VC") == "H" && m(cvssSelected, "VI") == "H") {
+    if (m(cvssSelected, "VC") == "H" && m(cvssSelected, "VI") == "H" && m(cvssSelected, "PR") == "N") {
         eq3 = 0
     }
-    else if (!(m(cvssSelected, "VC") == "H" && m(cvssSelected, "VI") == "H")
+    else if (!(m(cvssSelected, "PR") == "N") || !(m(cvssSelected, "VC") == "H" && m(cvssSelected, "VI") == "H")
         && (m(cvssSelected, "VC") == "H" || m(cvssSelected, "VI") == "H" || m(cvssSelected, "VA") == "H")) {
         eq3 = 1
     }
@@ -361,19 +363,20 @@ function macroVector(cvssSelected) {
         eq5 = 2
     }
 
-    // EQ6: 0-(CR:H and VC:H) or (IR:H and VI:H) or (AR:H and VA:H)
-    //      1-not[(CR:H and VC:H) or (IR:H and VI:H) or (AR:H and VA:H)]
+    // EQ6: 0-not PR:H and [(CR:H and VC:H) or (IR:H and VI:H) or (AR:H and VA:H)]
+    //      1-PR:H or not[(CR:H and VC:H) or (IR:H and VI:H) or (AR:H and VA:H)]
 
-    if ((m(cvssSelected, "CR") == "H" && m(cvssSelected, "VC") == "H")
+    if (!(m(cvssSelected, "PR") == "H")
+	&& ((m(cvssSelected, "CR") == "H" && m(cvssSelected, "VC") == "H")
         || (m(cvssSelected, "IR") == "H" && m(cvssSelected, "VI") == "H")
-        || (m(cvssSelected, "AR") == "H" && m(cvssSelected, "VA") == "H")) {
+        || (m(cvssSelected, "AR") == "H" && m(cvssSelected, "VA") == "H"))) {
         eq6 = 0
     }
-    else if (!((m(cvssSelected, "CR") == "H" && m(cvssSelected, "VC") == "H")
+    else if (m(cvssSelected, "PR") == "H"
+	|| !((m(cvssSelected, "CR") == "H" && m(cvssSelected, "VC") == "H")
         || (m(cvssSelected, "IR") == "H" && m(cvssSelected, "VI") == "H")
         || (m(cvssSelected, "AR") == "H" && m(cvssSelected, "VA") == "H"))) {
         eq6 = 1
     }
-
     return eq1 + eq2 + eq3 + eq4 + eq5 + eq6
 }
